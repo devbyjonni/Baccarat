@@ -7,9 +7,9 @@
 
 /*
  Rules
-  
+ 
  Following are the rules of baccarat. The terminology can be a little confusing. To try to minimize this, when referring to a particular bet or hand, I will use capital letters. In particular Player and Banker refer to bets as well as particular sets of two or three cards each.
-
+ 
  Usually eight decks of cards are used.
  Cards are given point values as follows: Ace = 1, 2-9 = pip value, 10 and face cards = 0.
  Play begins by all players betting either on the Player or Banker. There is also a side bet on a Tie. At some tables there are also side bets on a Player Pair and/or Banker Pair. There are lots of other newer side bets, which I go into in my baccarat appendix 5.
@@ -27,7 +27,7 @@
  The Player Pair bet wins if the first two cards in the Player hand are of the same rank. All other outcomes lose.
  The Banker Pair bet wins if the first two cards in the Banker hand are of the same rank. All other outcomes lose.
  
-
+ 
  */
 
 
@@ -48,27 +48,44 @@ class ViewController: UIViewController {
     }
     
     private var shoe: [Card] = []
-    private let totalDecks = 1
+    private let totalDecks = 8
+    private var totalBurnCards = 0
     private let cutCardRemaingCards = 16 //The cut card will be placed 16 cards from the bottom of the shoe.
     private lazy var cutCard = (52 * totalDecks) - cutCardRemaingCards
     private var lastHand = false
     private var oneMoreHand = false
-    private var totalBurnCards = 0
     
     private var playerCards: [Card] = []
     private var bankerCards: [Card] = []
     private var playerScores = 0
     private var bankerScores = 0
     
-   
+    private var currentWinners: [String] = []
+    private(set) var winners: [[String]] = []
+    
+    
+    var shoeCount = 1
+    func preload(numberOfShoes: Int) -> [[String]] {
+        loadShoe()
+        for count in 1...numberOfShoes {
+            while shoeCount <= count{
+                dealFirstFourCards()
+                checkCutCard()
+            }
+        }
+        return winners
+    }
+    
     //When the cut card appears, the dealer will finish that hand, play one more hand, and then start a new shoe.
     //If the cut card comes out instead of the first card, the dealer will finish that hand, and then start a new shoe.
     private func checkCutCard() {
-
         if lastHand {
             print("****** Did play last hand -> will create a new shoe. ******\n")
             lastHand = false
+            
+            winners.append(currentWinners)
             loadShoe()
+            shoeCount += 1
             return
         }
         
@@ -85,15 +102,16 @@ class ViewController: UIViewController {
             lastHand = true
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadShoe()
+        preload(numberOfShoes: 3)
     }
     
     private func resetShoe() {
         shoe = []
+        currentWinners = []
         lastHand = false
         oneMoreHand = false
     }
@@ -109,7 +127,7 @@ class ViewController: UIViewController {
     private func createShoe() {
         let cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         let suits = ["♥️", "♦️", "♠️", "♣️"]
- 
+        
         for deckNumber in 1...totalDecks {
             for suit in suits {
                 for index in 0..<cards.count {
@@ -251,10 +269,13 @@ class ViewController: UIViewController {
     private func showWinner() {
         if playerScores > bankerScores {
             print("🔵 PLAYER WINS: \(playerScores)\n")
+            currentWinners.append("P")
         } else if playerScores < bankerScores {
             print("🔴 BANKER WINS: \(bankerScores)\n")
+            currentWinners.append("B")
         } else if playerScores == bankerScores {
             print("🟢 TIE \(bankerScores)")
+            currentWinners.append("T")
         }
     }
     
@@ -264,6 +285,8 @@ class ViewController: UIViewController {
         dealFirstFourCards()
         checkCutCard()
         print("Shoe count: \(shoe.count)\n")
+        print("currentWinners: \(currentWinners)\n")
+        print("winners: \(winners)\n")
     }
     
     //MARK: - Debug
@@ -276,5 +299,12 @@ class ViewController: UIViewController {
         print("Shoe count: \(shoe.count)\n")
         print("Cut card: \(cutCard)\n")
         print("The deck is shuffled. We are ready to play.\n")
+        print("winners: \(winners)\n")
+        
+        for winner in winners {
+            print("current winner count: \(winner.count)\n")
+        }
+        
+        print("winners count: \(winners.count )\n")
     }
 }
