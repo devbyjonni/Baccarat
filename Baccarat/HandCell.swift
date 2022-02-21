@@ -23,24 +23,28 @@ class HandCell: UICollectionViewCell {
         self.gridView.layer.borderColor = UIColor.systemGray6.cgColor
     }
     
-    var hand: Grid? {
+    var hand: GridItem? {
         didSet {
-            guard let hand = hand else { return }
-            titleLabel.text = hand.title.uppercased()
+            print("\(hand?.hand?.title)")
+  
+            titleLabel.text = hand?.hand?.title.uppercased()
             titleLabel.textColor = .white
             backgrondView.backgroundColor = UIColor.clear
             
-            if hand.title == "10" {
+            
+            if hand?.hand?.title == "P" {
                 backgrondView.backgroundColor = UIColor.systemBlue
             }
             
-            if hand.title == "11" {
+            if hand?.hand?.title == "B" {
                 backgrondView.backgroundColor = .systemRed
             }
             
-            if hand.title == "12" {
+            if hand?.hand?.title == "T" {
                 backgrondView.backgroundColor = .systemGreen
             }
+            
+            
         }
     }
 }

@@ -39,6 +39,11 @@ struct Card {
     var pointValue: Int
 }
 
+struct Hand: Hashable {
+    var uuid: UUID
+    var title: String
+}
+
 class ShoeCreater {
     private enum DealtCards: Int {
         case two = 2
