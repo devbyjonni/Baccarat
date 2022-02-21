@@ -19,7 +19,7 @@ class HandCell: UICollectionViewCell {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.backgrondView.layer.cornerRadius = (self.backgrondView.frame.size.height) / 2
-        self.gridView.layer.borderWidth = 0.3
+        self.gridView.layer.borderWidth = 0.4
         self.gridView.layer.borderColor = UIColor.systemGray6.cgColor
     }
     

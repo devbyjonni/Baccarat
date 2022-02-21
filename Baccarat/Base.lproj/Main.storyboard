@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Yhg-RL-QOy">
-    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ThH-j2-Izq">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="dark"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -14,25 +14,12 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Baccarat" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OCb-Gv-LAY">
-                                <rect key="frame" x="462" y="699" width="100" height="51"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="DEAL">
-                                    <fontDescription key="titleFontDescription" style="UICTFontTextStyleTitle0"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="didTapDealBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kyC-9F-Wea"/>
-                                </connections>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Zsn-on-etC">
-                                <rect key="frame" x="20" y="70" width="984" height="300"/>
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="200"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="300" id="d4r-7r-msw"/>
-                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Nw2-bB-ot2">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -94,11 +81,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="OCb-Gv-LAY" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="340.5" id="DrQ-AR-gO2"/>
-                            <constraint firstItem="OCb-Gv-LAY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ipa-ug-4Ia"/>
-                            <constraint firstItem="Zsn-on-etC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Pi1-3D-JHd"/>
-                            <constraint firstItem="Zsn-on-etC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="QCB-pU-hlE"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Zsn-on-etC" secondAttribute="trailing" constant="20" id="TPb-6p-Wwp"/>
+                            <constraint firstItem="Zsn-on-etC" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Fsz-XG-Ugx"/>
+                            <constraint firstItem="Zsn-on-etC" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Pi1-3D-JHd"/>
+                            <constraint firstItem="Zsn-on-etC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QCB-pU-hlE"/>
+                            <constraint firstAttribute="trailing" secondItem="Zsn-on-etC" secondAttribute="trailing" id="TPb-6p-Wwp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Baccarat" id="AUT-n8-uoA"/>
@@ -108,25 +94,57 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047.65625" y="138.28125"/>
+            <point key="canvasLocation" x="3190" y="-84"/>
+        </scene>
+        <!--Baccarat-->
+        <scene sceneID="fsy-xy-t3E">
+            <objects>
+                <viewController id="zyq-Cm-qx3" customClass="ContainerViewController" customModule="Baccarat" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="d6m-Lv-D0S">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VEz-Xw-yHH">
+                                <rect key="frame" x="0.0" y="70" width="1024" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="G6E-rw-1yn"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="BYZ-38-t0r" kind="embed" id="cmM-pK-dDJ"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="bxa-TU-eMF"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="VEz-Xw-yHH" firstAttribute="leading" secondItem="bxa-TU-eMF" secondAttribute="leading" id="7lF-cp-VJz"/>
+                            <constraint firstItem="VEz-Xw-yHH" firstAttribute="top" secondItem="bxa-TU-eMF" secondAttribute="top" id="Fy7-20-lQz"/>
+                            <constraint firstItem="bxa-TU-eMF" firstAttribute="trailing" secondItem="VEz-Xw-yHH" secondAttribute="trailing" id="MS2-KF-mkp"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Baccarat" id="Bog-4f-pc1"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="d7x-fx-uAG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2456.8359375" y="137.5"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="dFb-jL-up5">
+        <scene sceneID="nlG-Sf-56L">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Yhg-RL-QOy" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ThH-j2-Izq" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="URY-CO-2Jc">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="R6r-JM-ZST">
                         <rect key="frame" x="0.0" y="20" width="1024" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="alq-P0-ZYW"/>
+                        <segue destination="zyq-Cm-qx3" kind="relationship" relationship="rootViewController" id="PCx-RZ-eia"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F4V-FP-Eqt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RWd-f3-P0U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="360" y="138"/>
+            <point key="canvasLocation" x="1732.6171875" y="137.5"/>
         </scene>
     </scenes>
     <resources>

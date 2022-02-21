@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FA7740F327C3F57000482E5B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7740F227C3F57000482E5B /* HeaderView.swift */; };
+		FA7D7ED827C42730004109DF /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7D7ED727C42730004109DF /* ContainerViewController.swift */; };
 		FA97457D27C182780027A20C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97457C27C182780027A20C /* AppDelegate.swift */; };
 		FA97457F27C182780027A20C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97457E27C182780027A20C /* SceneDelegate.swift */; };
 		FA97458127C182780027A20C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA97458027C182780027A20C /* ViewController.swift */; };
@@ -19,7 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FA7740F227C3F57000482E5B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		FA7D7ED727C42730004109DF /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		FA97457927C182780027A20C /* Baccarat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Baccarat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA97457C27C182780027A20C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FA97457E27C182780027A20C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +43,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA7D7ED927C42B54004109DF /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FA97457C27C182780027A20C /* AppDelegate.swift */,
+				FA97457E27C182780027A20C /* SceneDelegate.swift */,
+				FA97458527C182790027A20C /* Assets.xcassets */,
+				FA97458A27C182790027A20C /* Info.plist */,
+				FA97458727C182790027A20C /* LaunchScreen.storyboard */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		FA97457027C182780027A20C = {
 			isa = PBXGroup;
 			children = (
@@ -62,16 +74,12 @@
 		FA97457B27C182780027A20C /* Baccarat */ = {
 			isa = PBXGroup;
 			children = (
+				FA97458227C182780027A20C /* Main.storyboard */,
 				FA97458027C182780027A20C /* ViewController.swift */,
-				FA7740F227C3F57000482E5B /* HeaderView.swift */,
 				FAD75B2827C30C0F00D0BD4F /* HandCell.swift */,
 				FAA1C1FC27C2B7D800FBB256 /* ShoeCreater.swift */,
-				FA97457C27C182780027A20C /* AppDelegate.swift */,
-				FA97457E27C182780027A20C /* SceneDelegate.swift */,
-				FA97458227C182780027A20C /* Main.storyboard */,
-				FA97458527C182790027A20C /* Assets.xcassets */,
-				FA97458727C182790027A20C /* LaunchScreen.storyboard */,
-				FA97458A27C182790027A20C /* Info.plist */,
+				FA7D7ED727C42730004109DF /* ContainerViewController.swift */,
+				FA7D7ED927C42B54004109DF /* App */,
 			);
 			path = Baccarat;
 			sourceTree = "<group>";
@@ -148,7 +156,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA97458127C182780027A20C /* ViewController.swift in Sources */,
-				FA7740F327C3F57000482E5B /* HeaderView.swift in Sources */,
+				FA7D7ED827C42730004109DF /* ContainerViewController.swift in Sources */,
 				FAA1C1FD27C2B7D800FBB256 /* ShoeCreater.swift in Sources */,
 				FA97457D27C182780027A20C /* AppDelegate.swift in Sources */,
 				FA97457F27C182780027A20C /* SceneDelegate.swift in Sources */,
@@ -303,7 +311,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CR42C4ETD5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Baccarat/Info.plist;
+				INFOPLIST_FILE = Baccarat/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -331,7 +339,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = CR42C4ETD5;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Baccarat/Info.plist;
+				INFOPLIST_FILE = Baccarat/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
