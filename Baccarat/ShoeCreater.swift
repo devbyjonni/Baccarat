@@ -38,12 +38,13 @@ struct Card {
 }
 
 class Hand: Hashable, Equatable {
-    init(title: String) {
-        self.title = title
-    }
     
     var uuid = UUID()
     var title: String
+    
+    init(title: String) {
+        self.title = title
+    }
     
     func hash(into hasher: inout Hasher) {
         return hasher.combine(uuid)
@@ -334,10 +335,10 @@ class ShoeCreater {
     
     //MARK: - Debug
     
-//    private func printCounterOutput() {
-//        print("current winners: \(currentWinners)\n")
-//        print("current winners count: \(currentWinners.count )\n")
-//    }
+    //    private func printCounterOutput() {
+    //        print("current winners: \(currentWinners)\n")
+    //        print("current winners count: \(currentWinners.count )\n")
+    //    }
     
     private func printOutput() {
         print("Total burn cards: \(totalBurnCards)\n")

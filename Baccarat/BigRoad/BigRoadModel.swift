@@ -25,14 +25,26 @@ class BigRoadModel {
         self.model = model
     }
     
-    private func reset() {
+    func addPlayer() {
+        model.addPlayer()
+    }
+    
+    func addBanker() {
+        model.addBanker()
+    }
+    
+    func addTie() {
+        model.addTie()
+    }
+    
+    func reset() {
         currentSection = 0
         currentIndex = 0
         prevHand = ""
         sectionIndexBeforeDragon = 0
         dragonIndex = 0
         didStartDragon = false
-        deleteIndex = [:]
+        //deleteIndex = [:]
         deleteIDXs = []
     }
     
@@ -51,37 +63,35 @@ class BigRoadModel {
             let sections = GridSection(hands: hands)
             sectionHands.append(sections)
         }
+        self.gridSections = []
         self.gridSections = sectionHands
     }
     
     private var deleteIDXs = [IndexPath]()
-    private var deleteIndex = [String : IndexPath]()
+    //private var deleteIndex = [String : IndexPath]()
+    
     
     func delete() {
         let idx = deleteIDXs.removeLast()
-        let hand = gridSections[idx.section].hands.remove(at: idx.item)
-        let uuidStr = hand.hand?.uuid.uuidString
-        deleteIndex[uuidStr!] = nil
+        let gridItemToDelete = gridSections[idx.section].hands.remove(at: idx.item)
+        //let uuidStr = gridItemToDelete.hand?.uuid.uuidString
+        //deleteIndex[uuidStr!] = nil
         gridSections[idx.section].hands.insert(GridItem(hand: nil), at: idx.item)
-        
-        currentSection = idx.section
-        currentIndex = idx.item
-        
-        print("\(idx)")
-        print("\(currentSection)")
-        print("\(currentIndex)")
+        model.deleteHand()
+       
+     
     }
     
     private func updateDeleteIndex(sectionIndex: Int, itemIndex: Int, hand: Hand) {
         let idx = IndexPath(item: itemIndex, section: sectionIndex)
-        deleteIndex[hand.uuid.uuidString] = idx
+        //deleteIndex[hand.uuid.uuidString] = idx
         deleteIDXs.append(idx)
     }
     
-    
     private func updateHand(sectionIndex: Int, itemIndex: Int, hand: Hand) {
         gridSections[sectionIndex].hands.remove(at: itemIndex)
-        gridSections[sectionIndex].hands.insert(GridItem(hand: hand), at: itemIndex)
+        let gridItem = GridItem(hand: hand)
+        gridSections[sectionIndex].hands.insert(gridItem, at: itemIndex)
     }
     
     func add(hand: Hand) {
@@ -89,8 +99,6 @@ class BigRoadModel {
         if prevHand == "" {
             if hand.title == "T" {
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
-                //                gridSections[currentSection].hands.remove(at: currentIndex)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 
@@ -98,8 +106,6 @@ class BigRoadModel {
                 
             } else if hand.title == "P" {
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
-                //                gridSections[currentSection].hands.remove(at: currentIndex)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 
@@ -109,8 +115,6 @@ class BigRoadModel {
                 
             }  else if hand.title == "B" {
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
-                //                gridSections[currentSection].hands.remove(at: currentIndex)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 
@@ -130,8 +134,6 @@ class BigRoadModel {
                 hand.title = "PT"
                 //Save
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
-                //                gridSections[currentSection].hands.remove(at: currentIndex)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: Hand(title: "PT")), at: currentIndex)
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 
@@ -144,9 +146,6 @@ class BigRoadModel {
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 hand.title = "BT"
                 //Save
-                
-                //                gridSections[currentSection].hands.remove(at: currentIndex)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: Hand(title: "BT")), at: currentIndex)
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                 
@@ -163,14 +162,13 @@ class BigRoadModel {
             dragonIndex = currentIndex - 1  // y
         }
         
-        if hand.title == "T" {
-            if prevHand == "P" {
-                updateHand(sectionIndex: currentSection, itemIndex: currentIndex - 1, hand: hand)
+        if hand.title == "T" || hand.title == "PT" || hand.title == "BT"{
+            if prevHand == "P"  || prevHand == "PT"{
                 hand.title = "PT"
-                //Save
+                updateHand(sectionIndex: currentSection, itemIndex: currentIndex - 1, hand: hand)
                 
-                //                gridSections[currentSection].hands.remove(at: currentIndex - 1)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex - 1)
+                
+                //Save
                 
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex - 1, hand: hand)
                 
@@ -181,12 +179,10 @@ class BigRoadModel {
                 updateHand(sectionIndex: currentSection, itemIndex: currentIndex - 1, hand: hand)
                 hand.title = "BT"
                 
-                //                gridSections[currentSection].hands.remove(at: currentIndex - 1)
-                //                gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex - 1)
-                
                 updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex - 1, hand: hand)
                 
                 prevHand = "B"
+                
                 
             } else {
                 
@@ -199,9 +195,6 @@ class BigRoadModel {
                     
                     updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: currentIndex)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                     
                     currentIndex += 1
@@ -211,10 +204,8 @@ class BigRoadModel {
                     
                     updateHand(sectionIndex: currentSection, itemIndex: dragonIndex, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: dragonIndex)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: dragonIndex)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: dragonIndex, hand: hand)
+                    
                     
                     didStartDragon = true
                 }
@@ -230,24 +221,20 @@ class BigRoadModel {
                     
                     updateHand(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: 0)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
                     currentIndex = 1
+                    
                     
                 } else {
                     currentSection += 1
                     
                     updateHand(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: 0)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
                     currentIndex = 1
+                    
                     
                 }
             }
@@ -261,22 +248,19 @@ class BigRoadModel {
                     
                     updateHand(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: currentIndex)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: currentIndex, hand: hand)
                     
                     currentIndex += 1
+                    
+                    
                     
                 } else {
                     currentSection += 1 //shift section
                     
                     updateHand(sectionIndex: currentSection, itemIndex: dragonIndex, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: dragonIndex)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: dragonIndex)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: dragonIndex, hand: hand)
+                    
                     
                     didStartDragon = true
                 }
@@ -291,24 +275,21 @@ class BigRoadModel {
                     
                     updateHand(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: 0)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
                     currentIndex = 1
+                    
+                    
                     
                 } else {
                     currentSection += 1
                     
                     updateHand(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
-                    //                    gridSections[currentSection].hands.remove(at: 0)
-                    //                    gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
-                    
                     updateDeleteIndex(sectionIndex: currentSection, itemIndex: 0, hand: hand)
                     
                     currentIndex = 1
+                    
                     
                 }
             }

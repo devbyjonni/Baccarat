@@ -30,9 +30,19 @@ class BigRoadViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(undoHand), name: .undo, object: nil)
     }
     
+    //this function is a fix to make animation work on add and delete. asyncAfter in main view controller "didTapUndoBtn".
     @objc private func undoHand() {
         modelController.delete()
         update()
+        
+        modelController.createNewShoe()
+        for hand in modelController.model.shoes {
+            addHand(hand: hand)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            self.update(animatingDifferences: false)
+        }
     }
     
     @objc private func didLoadShoe() {
@@ -45,17 +55,20 @@ class BigRoadViewController: UIViewController {
     }
     
     @objc private func didAddPlayer() {
-        modelController.add(hand: Hand(title: "P"))
+        modelController.addPlayer()
+        addHand(hand: modelController.model.shoes.last!)
         update()
     }
     
     @objc private func didAddBanker() {
-        modelController.add(hand: Hand(title: "B"))
+        modelController.addBanker()
+        addHand(hand: modelController.model.shoes.last!)
         update()
     }
     
     @objc private func didAddTie() {
-        modelController.add(hand: Hand(title: "T"))
+        modelController.addTie()
+        addHand(hand: modelController.model.shoes.last!)
         update()
     }
     

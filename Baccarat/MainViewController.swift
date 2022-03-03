@@ -8,7 +8,7 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
+    
     var modelController: ModelController!
     
     override func viewDidLoad() {
@@ -18,7 +18,7 @@ class MainViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      
+        
         if segue.identifier == "ShowBigRoad" {
             if let vc = segue.destination as? BigRoadViewController {
                 vc.modelController = BigRoadModel(model: modelController)
@@ -47,9 +47,15 @@ class MainViewController: UIViewController {
         
     }
     
+    private var post = true
     @IBAction func didTapUndoBtn(_ sender: UIButton) {
-        NotificationCenter.default.post(name: .undo, object: nil)
-        
+        if post == true {
+            post = false
+            NotificationCenter.default.post(name: .undo, object: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                self.post = true
+            }
+        }
     }
     
     @IBAction func createNewShoe(_ sender: Any) {

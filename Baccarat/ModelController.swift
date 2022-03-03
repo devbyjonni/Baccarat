@@ -21,4 +21,20 @@ class ModelController {
         shoes = shoeCreater.loadShoe()
         NotificationCenter.default.post(name: .didLoadShoe, object: nil)
     }
+    
+    func addPlayer() {
+        shoes.append(Hand(title: "P"))
+    }
+    
+    func addBanker() {
+        shoes.append(Hand(title: "B"))
+    }
+    
+    func addTie() {
+        shoes.append(Hand(title: "T"))
+    }
+    
+    func deleteHand() {
+        shoes.removeLast()
+    }
 }
