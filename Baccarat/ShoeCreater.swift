@@ -26,8 +26,6 @@
  The Tie bet wins if the Player and Banker hands tie. All other outcomes lose.
  The Player Pair bet wins if the first two cards in the Player hand are of the same rank. All other outcomes lose.
  The Banker Pair bet wins if the first two cards in the Banker hand are of the same rank. All other outcomes lose.
- 
- 
  */
 
 import Foundation
@@ -39,17 +37,31 @@ struct Card {
     var pointValue: Int
 }
 
-struct Hand: Hashable {
-    var uuid: UUID
+class Hand: Hashable, Equatable {
+    init(title: String) {
+        self.title = title
+    }
+    
+    var uuid = UUID()
     var title: String
+    
+    func hash(into hasher: inout Hasher) {
+        return hasher.combine(uuid)
+    }
+    
+    static func == (lhs: Hand, rhs: Hand) -> Bool {
+        return lhs.uuid == rhs.uuid
+    }
 }
 
 class ShoeCreater {
+    
     private enum DealtCards: Int {
         case two = 2
         case three = 3
     }
     
+    private var usedShoe: [Card] = []
     private var shoe: [Card] = []
     private let totalDecks = 8
     private var totalBurnCards = 0
@@ -62,63 +74,39 @@ class ShoeCreater {
     private var bankerCards: [Card] = []
     private var playerScores = 0
     private var bankerScores = 0
+    private var numberOfShoes = 1
+    private var isFirstLoad = true
     
-    private var currentWinners: [Hand] = []
-    private(set) var winners: [[Hand]] = []
+    private var shoeResult: [Hand] = []
     
-    
-    private var shoeCount = 1
-    func preload(numberOfShoes: Int) -> [[Hand]] {
-        loadShoe()
-        for count in 1...numberOfShoes {
-            while shoeCount <= count{
-                dealFirstFourCards()
-                checkCutCard()
-            }
-        }
-        return winners
-    }
-    
-    //When the cut card appears, the dealer will finish that hand, play one more hand, and then start a new shoe.
-    //If the cut card comes out instead of the first card, the dealer will finish that hand, and then start a new shoe.
-    func checkCutCard() {
-        if lastHand {
-            print("****** Did play last hand -> will create a new shoe. ******\n")
-            lastHand = false
-            shoeCount += 1
-            winners.append(currentWinners)
-            loadShoe()
-            
-            return
-        }
-        
-        if shoe.count == cutCardRemaingCards {
-            print("****** first card WAS cut card, the dealer will finish this hand ******\n")
-            // If the cut card comes out instead of the first card, the dealer will finish that hand, and then start a new shoe.
-            lastHand = true
-            return
-        }
-        
-        if shoe.count < cutCardRemaingCards {
-            print("****** cut card DID appear, the dealer will play one more hand ******\n")
-            // When the cut card appears, the dealer will finish that hand, play one more hand, and then start a new shoe.
-            lastHand = true
-        }
-    }
-    
-    private func resetShoe() {
-        shoe = []
-        currentWinners = []
-        lastHand = false
-        oneMoreHand = false
-    }
-    
-    private func loadShoe() {
+    init() {
         resetShoe()
         createShoe()
         shuffleCards()
         burnCards()
         printOutput()
+    }
+    
+    func loadShoe() -> [Hand] {
+        resetShoe()
+        shuffleCards()
+        burnCards()
+        printOutput()
+        
+        while numberOfShoes <= 1 {
+            dealFirstFourCards()
+            checkCutCard()
+        }
+        
+        return shoeResult
+    }
+    
+    private func resetShoe() {
+        shoe = []
+        shoeResult = []
+        lastHand = false
+        oneMoreHand = false
+        numberOfShoes = 1
     }
     
     private func createShoe() {
@@ -137,17 +125,53 @@ class ShoeCreater {
     }
     
     private func shuffleCards() {
-        shoe.shuffle()
+        if isFirstLoad {
+            shoe = customShuffled()
+            isFirstLoad = false
+            print("+++++++++++++++++ Init First Shoe +++++++++++++++++ \(shoe.count)")
+        } else {
+            shoe = usedShoe
+            shoe = customShuffled()
+            usedShoe = []
+            print("+++++++++++++++++ Used Shoe +++++++++++++++++ \(shoe.count)")
+        }
     }
+    
+    private func customShuffled() -> [Card] {
+        
+        let chunks = shoe.chunked(into: 52)
+        
+        let chunk1 = chunks[0]
+        let chunk2 = chunks[1]
+        let chunk3 = chunks[2]
+        let chunk4 = chunks[3]
+        
+        let chunk5 = chunks[4]
+        let chunk6 = chunks[5]
+        let chunk7 = chunks[6]
+        let chunk8 = chunks[7]
+        
+        let chunks1 = (chunk4 + chunk5).shuffled()
+        let chunks2 = (chunk3 + chunk6).shuffled()
+        let chunks3 = (chunk2 + chunk7).shuffled()
+        let chunks4 = (chunk1 + chunk8).shuffled()
+        
+        let shuffled = chunks1 + chunks2 + chunks3 + chunks4
+        
+        return shuffled
+    }
+    
     
     private func burnCards() {
         guard let turnOverCardValue = shoe.first?.pointValue else { return }
         let burnCards = turnOverCardValue == 0 ? 10 : turnOverCardValue
         totalBurnCards = burnCards
+        usedShoe.append(contentsOf: shoe.dropFirst(burnCards))
+        print("dropFirst count: \(shoe.count)")
         shoe.removeSubrange(0..<burnCards)
     }
     
-    func dealFirstFourCards() {
+    private func dealFirstFourCards() {
         playerCards = []
         bankerCards = []
         totalBurnCards = 0
@@ -162,20 +186,45 @@ class ShoeCreater {
         showFirstFourCards()
     }
     
-    private func showFirstFourCards() {
-        guard let playerHandFirst = playerCards.first,
-              let bankerHandFirst = bankerCards.first,
-              let playerHandLast = playerCards.last,
-              let bankerHandLast = bankerCards.last
-        else { return }
+    //When the cut card appears, the dealer will finish that hand, play one more hand, and then start a new shoe.
+    //If the cut card comes out instead of the first card, the dealer will finish that hand, and then start a new shoe.
+    private func checkCutCard() {
+        if lastHand {
+            print("****** Did play last hand -> will create a new shoe. ******\n")
+            lastHand = false
+            numberOfShoes += 1
+            
+            return
+        }
         
-        print("----------------------")
-        print("Player Card 1: \(playerHandFirst.suit) \(playerHandFirst.pointValue)\n")
-        print("Player Card 2: \(playerHandLast.suit) \(playerHandLast.pointValue)")
-        print("----------------------")
-        print("Banker Card 1: \(bankerHandFirst.suit) \(bankerHandFirst.pointValue)\n")
-        print("Banker Card 2: \(bankerHandLast.suit) \(bankerHandLast.pointValue)")
-        print("----------------------\n")
+        if shoe.count == cutCardRemaingCards {
+            print("****** first card WAS cut card, the dealer will finish this hand ******\n")
+            // If the cut card comes out instead of the first card, the dealer will finish that hand, and then start a new shoe.
+            lastHand = true
+            return
+        }
+        
+        if shoe.count < cutCardRemaingCards {
+            print("****** cut card DID appear, the dealer will play one more hand ******\n")
+            // When the cut card appears, the dealer will finish that hand, play one more hand, and then start a new shoe.
+            lastHand = true
+        }
+    }
+    
+    private func showFirstFourCards() {
+        //        guard let playerHandFirst = playerCards.first,
+        //              let bankerHandFirst = bankerCards.first,
+        //              let playerHandLast = playerCards.last,
+        //              let bankerHandLast = bankerCards.last
+        //        else { return }
+        
+        //        print("----------------------")
+        //        print("Player Card 1: \(playerHandFirst.suit) \(playerHandFirst.pointValue)\n")
+        //        print("Player Card 2: \(playerHandLast.suit) \(playerHandLast.pointValue)")
+        //        print("----------------------")
+        //        print("Banker Card 1: \(bankerHandFirst.suit) \(bankerHandFirst.pointValue)\n")
+        //        print("Banker Card 2: \(bankerHandLast.suit) \(bankerHandLast.pointValue)")
+        //        print("----------------------\n")
         
         updateScores()
         checkForNaturals()
@@ -191,12 +240,19 @@ class ShoeCreater {
         : (bankerCards[0].pointValue + bankerCards[1].pointValue) % 10
     }
     
+    
     private func drawPlayerCard() {
-        playerCards.append(shoe.removeFirst())
+        let firstCard = shoe.removeFirst()
+        
+        usedShoe.append(firstCard)
+        playerCards.append(firstCard)
     }
     
     private func drawBankerCard() {
-        bankerCards.append(shoe.removeFirst())
+        let firstCard = shoe.removeFirst()
+        
+        usedShoe.append(firstCard)
+        bankerCards.append(firstCard)
     }
     
     private func drawThirdCards() {
@@ -235,17 +291,17 @@ class ShoeCreater {
     
     private func showThirdCards() {
         if playerCards.count == DealtCards.three.rawValue {
-            let playerHand = playerCards[2]
-            print("----------------------")
-            print("Player Card 3: \(playerHand.suit) \(playerHand.pointValue)\n")
-            print("----------------------\n")
+            // let playerHand = playerCards[2]
+            //            print("----------------------")
+            //            print("Player Card 3: \(playerHand.suit) \(playerHand.pointValue)\n")
+            //            print("----------------------\n")
         }
         
         if bankerCards.count == DealtCards.three.rawValue {
-            let bankerHand = bankerCards[2]
-            print("----------------------")
-            print("Banker Card 3: \(bankerHand.suit) \(bankerHand.pointValue)")
-            print("----------------------\n")
+            // let bankerHand = bankerCards[2]
+            //            print("----------------------")
+            //            print("Banker Card 3: \(bankerHand.suit) \(bankerHand.pointValue)")
+            //            print("----------------------\n")
         }
         showWinner()
     }
@@ -265,27 +321,23 @@ class ShoeCreater {
     
     private func showWinner() {
         if playerScores > bankerScores {
-            print("🔵 PLAYER WINS 🔵 Points: \(playerScores)\n")
-            currentWinners.append(Hand(uuid: UUID(), title: "P"))
+            //  print("🔵 PLAYER WINS 🔵 Points: \(playerScores)\n")
+            shoeResult.append(Hand(title: "P"))
         } else if playerScores < bankerScores {
-            print("🔴 BANKER WINS 🔴 Points: \(bankerScores)\n")
-            currentWinners.append(Hand(uuid: UUID(), title: "B"))
+            //  print("🔴 BANKER WINS 🔴 Points: \(bankerScores)\n")
+            shoeResult.append(Hand(title: "B"))
         } else if playerScores == bankerScores {
-            print("🟢 TIE 🟢 Points: \(bankerScores)")
-            currentWinners.append(Hand(uuid: UUID(), title: "T"))
+            // print("🟢 TIE 🟢 Points: \(bankerScores)")
+            shoeResult.append(Hand(title: "T"))
         }
     }
     
     //MARK: - Debug
     
-    func printCounterOutput() {
-        for winner in winners {
-            print("current winner count: \(winner.count)\n")
-        }
-        
-        print("current winners: \(currentWinners)\n")
-        print("current winners count: \(currentWinners.count )\n")
-    }
+//    private func printCounterOutput() {
+//        print("current winners: \(currentWinners)\n")
+//        print("current winners count: \(currentWinners.count )\n")
+//    }
     
     private func printOutput() {
         print("Total burn cards: \(totalBurnCards)\n")
@@ -293,12 +345,5 @@ class ShoeCreater {
         print("Shoe count: \(shoe.count)\n")
         print("Cut card: \(cutCard)\n")
         print("The deck is shuffled. We are ready to play.\n")
-        print("winners: \(winners)\n")
-        
-        for winner in winners {
-            print("current winner count: \(winner.count)\n")
-        }
-        
-        print("winners count: \(winners.count )\n")
     }
 }
