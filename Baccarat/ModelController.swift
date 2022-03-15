@@ -10,7 +10,14 @@ import Foundation
 class ModelController {
     
     private let shoeCreater: ShoeCreater
-    private(set) var shoes: [Hand]
+    
+    
+    var shoes: [Hand] {
+        didSet {
+           
+             //print("did update data")
+        }
+    }
     
     init(shoeCreater: ShoeCreater) {
         self.shoeCreater = shoeCreater
@@ -19,22 +26,26 @@ class ModelController {
     
     func createNewShoe() {
         shoes = shoeCreater.loadShoe()
-        NotificationCenter.default.post(name: .didLoadShoe, object: nil)
+        NotificationCenter.default.post(name: .didCreateShoe, object: nil)
     }
     
     func addPlayer() {
         shoes.append(Hand(title: "P"))
+        NotificationCenter.default.post(name: .didAddData, object: nil)
     }
     
     func addBanker() {
         shoes.append(Hand(title: "B"))
+        NotificationCenter.default.post(name: .didAddData, object: nil)
     }
     
     func addTie() {
         shoes.append(Hand(title: "T"))
+        NotificationCenter.default.post(name: .didAddData, object: nil)
     }
     
     func deleteHand() {
-        shoes.removeLast()
+     shoes.removeLast()
+        //NotificationCenter.default.post(name: .didDeleteData, object: nil)
     }
 }

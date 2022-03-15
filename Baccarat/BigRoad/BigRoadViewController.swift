@@ -12,76 +12,45 @@ class BigRoadViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var dataSource: UICollectionViewDiffableDataSource<GridSection, GridItem?>! = nil
-    var modelController: BigRoadModel!
+    
+    var viewModel: BigRoadViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        modelController.createGrid()
+        viewModel.createGrid()
         configureDataSource()
-        setupLayout()
+        configureLayout()
         
         collectionView.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddPlayer), name: .didAddPlayer, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddBanker), name: .didAddBanker, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddTie), name: .didAddTie, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didLoadShoe), name: .didLoadShoe, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(undoHand), name: .undo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didCreateShoe), name: .didCreateShoe, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didDeleteData), name: .didDeleteData, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didAddData), name: .didAddData, object: nil)
+    }
+    
+    @objc private func didCreateShoe() {
+        viewModel.loadShoe()
+        updateSnapshot(animatingDifferences: false)
+    }
+    
+    @objc private func didAddData() {
+        viewModel.update()
+        updateSnapshot()
     }
     
     //this function is a fix to make animation work on add and delete. asyncAfter in main view controller "didTapUndoBtn".
-    @objc private func undoHand() {
-        modelController.delete()
-        update()
-        
-        modelController.createNewShoe()
-        for hand in modelController.model.shoes {
-            addHand(hand: hand)
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-            self.update(animatingDifferences: false)
-        }
+    @objc private func didDeleteData() {
+        viewModel.delete()
+        viewModel.loadShoe()
+        updateSnapshot(animatingDifferences: false)
     }
     
-    @objc private func didLoadShoe() {
-        modelController.createNewShoe()
-        
-        for hand in modelController.model.shoes {
-            addHand(hand: hand)
-        }
-        update(animatingDifferences: false)
-    }
-    
-    @objc private func didAddPlayer() {
-        modelController.addPlayer()
-        addHand(hand: modelController.model.shoes.last!)
-        update()
-    }
-    
-    @objc private func didAddBanker() {
-        modelController.addBanker()
-        addHand(hand: modelController.model.shoes.last!)
-        update()
-    }
-    
-    @objc private func didAddTie() {
-        modelController.addTie()
-        addHand(hand: modelController.model.shoes.last!)
-        update()
-    }
-    
-    private func addHand(hand: Hand) {
-        modelController.add(hand: hand)
-    }
-    
-    private func setupLayout() {
+    private func configureLayout() {
         let layout = HorizontalVerticalCompositionalLayout(itemsPerRow: 6, contentInsets: 0)
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
         layout.configuration = config
-        
         collectionView.collectionViewLayout = layout
     }
 }
@@ -96,12 +65,12 @@ extension BigRoadViewController {
             return cell
         }
         collectionView.dataSource = dataSource
-        update(animatingDifferences: false)
+        updateSnapshot(animatingDifferences: false)
     }
     
-    private func update(animatingDifferences: Bool = true) {
+    private func updateSnapshot(animatingDifferences: Bool = true) {
         var snapshot = NSDiffableDataSourceSnapshot<GridSection, GridItem?>()
-        modelController.gridSections.forEach { (section) in
+        viewModel.gridSections.forEach { (section) in
             snapshot.appendSections([section])
             snapshot.appendItems(section.hands)
         }

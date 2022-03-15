@@ -14,48 +14,38 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        modelController.createNewShoe()
+        //modelController.createNewShoe()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "ShowBigRoad" {
             if let vc = segue.destination as? BigRoadViewController {
-                vc.modelController = BigRoadModel(model: modelController)
+                vc.viewModel = BigRoadViewModel(model: modelController)
             }
         }
         
         if segue.identifier == "ShowBedPlate" {
             if let vc = segue.destination as? BedPlateViewController {
-                vc.modelController = BedPlateModel(model: modelController)
+                vc.viewModel = BedPlateViewModel(model: modelController)
             }
         }
     }
     
     @IBAction func didTapPlayerBtn(_ sender: UIButton) {
-        NotificationCenter.default.post(name: .didAddPlayer, object: nil)
-        
+        modelController.addPlayer()
     }
     
     @IBAction func didTapBankerBtn(_ sender: UIButton) {
-        NotificationCenter.default.post(name: .didAddBanker, object: nil)
-        
+        modelController.addBanker()
     }
     
     @IBAction func didTapTieBtn(_ sender: UIButton) {
-        NotificationCenter.default.post(name: .didAddTie, object: nil)
-        
+        modelController.addTie()
     }
     
-    private var post = true
     @IBAction func didTapUndoBtn(_ sender: UIButton) {
-        if post == true {
-            post = false
-            NotificationCenter.default.post(name: .undo, object: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-                self.post = true
-            }
-        }
+        NotificationCenter.default.post(name: .didDeleteData, object: nil)
     }
     
     @IBAction func createNewShoe(_ sender: Any) {
@@ -64,10 +54,10 @@ class MainViewController: UIViewController {
 }
 
 extension Notification.Name {
-    static let undo = Notification.Name("undo")
-    static let didAddPlayer = Notification.Name("didAddPlayer")
-    static let didAddBanker = Notification.Name("didAddBanker")
-    static let didAddTie = Notification.Name("didAddTie")
+    
     static let createNewShoe = Notification.Name("createNewShoe")
-    static let didLoadShoe = Notification.Name("didLoadShoe")
+    static let didCreateShoe = Notification.Name("didCreateShoe")
+    
+    static let didDeleteData = Notification.Name("didDeleteData")
+    static let didAddData = Notification.Name("didAddData")
 }

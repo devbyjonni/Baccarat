@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FA33FCBF27CEA2D90089357D /* BigRoadModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCBE27CEA2D90089357D /* BigRoadModel.swift */; };
-		FA33FCC327CEA4BE0089357D /* BedPlateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCC227CEA4BE0089357D /* BedPlateModel.swift */; };
+		FA33FCBF27CEA2D90089357D /* BigRoadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCBE27CEA2D90089357D /* BigRoadViewModel.swift */; };
+		FA33FCC327CEA4BE0089357D /* BedPlateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCC227CEA4BE0089357D /* BedPlateViewModel.swift */; };
 		FA33FCC527CEA5D90089357D /* GridSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCC427CEA5D90089357D /* GridSection.swift */; };
 		FA33FCC727CEA5F40089357D /* GridItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCC627CEA5F40089357D /* GridItem.swift */; };
 		FA33FCC927CEA6420089357D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA33FCC827CEA6420089357D /* Helper.swift */; };
@@ -28,8 +28,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		FA33FCBE27CEA2D90089357D /* BigRoadModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigRoadModel.swift; sourceTree = "<group>"; };
-		FA33FCC227CEA4BE0089357D /* BedPlateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedPlateModel.swift; sourceTree = "<group>"; };
+		FA33FCBE27CEA2D90089357D /* BigRoadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigRoadViewModel.swift; sourceTree = "<group>"; };
+		FA33FCC227CEA4BE0089357D /* BedPlateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedPlateViewModel.swift; sourceTree = "<group>"; };
 		FA33FCC427CEA5D90089357D /* GridSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSection.swift; sourceTree = "<group>"; };
 		FA33FCC627CEA5F40089357D /* GridItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridItem.swift; sourceTree = "<group>"; };
 		FA33FCC827CEA6420089357D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -73,7 +73,7 @@
 			isa = PBXGroup;
 			children = (
 				FA7D7EDD27C4341D004109DF /* BigRoadViewController.swift */,
-				FA33FCBE27CEA2D90089357D /* BigRoadModel.swift */,
+				FA33FCBE27CEA2D90089357D /* BigRoadViewModel.swift */,
 				FAD75B2827C30C0F00D0BD4F /* BigRoadCell.swift */,
 			);
 			path = BigRoad;
@@ -83,7 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				FA97458027C182780027A20C /* BedPlateViewController.swift */,
-				FA33FCC227CEA4BE0089357D /* BedPlateModel.swift */,
+				FA33FCC227CEA4BE0089357D /* BedPlateViewModel.swift */,
 				FA33FCCA27CEAA5A0089357D /* BedPlateCell.swift */,
 			);
 			path = BedPlate;
@@ -214,12 +214,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA33FCBF27CEA2D90089357D /* BigRoadModel.swift in Sources */,
+				FA33FCBF27CEA2D90089357D /* BigRoadViewModel.swift in Sources */,
 				FA33FCC927CEA6420089357D /* Helper.swift in Sources */,
 				FA97458127C182780027A20C /* BedPlateViewController.swift in Sources */,
 				FA33FCC727CEA5F40089357D /* GridItem.swift in Sources */,
 				FA7D7ED827C42730004109DF /* MainViewController.swift in Sources */,
-				FA33FCC327CEA4BE0089357D /* BedPlateModel.swift in Sources */,
+				FA33FCC327CEA4BE0089357D /* BedPlateViewModel.swift in Sources */,
 				FAA1C1FD27C2B7D800FBB256 /* ShoeCreater.swift in Sources */,
 				FA97457D27C182780027A20C /* AppDelegate.swift in Sources */,
 				FA97457F27C182780027A20C /* SceneDelegate.swift in Sources */,

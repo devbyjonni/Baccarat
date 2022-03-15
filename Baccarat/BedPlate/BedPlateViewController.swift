@@ -15,58 +15,38 @@ class BedPlateViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var dataSource: UICollectionViewDiffableDataSource<GridSection, GridItem?>! = nil
-    var modelController: BedPlateModel!
+    var viewModel: BedPlateViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        modelController.createGrid()
+        viewModel.createGrid()
         configureDataSource()
-        setupLayout()
+        configureLayout()
         
         collectionView.delegate = self
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddPlayer), name: .didAddPlayer, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddBanker), name: .didAddBanker, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didAddTie), name: .didAddTie, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didLoadShoe), name: .didLoadShoe, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(undoHand), name: .undo, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didCreateShoe), name: .didCreateShoe, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didDeleteData), name: .didDeleteData, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didAddData), name: .didAddData, object: nil)
     }
     
-    @objc private func didLoadShoe() {
-        modelController.createNewShoe()
-        
-        for hand in modelController.model.shoes {
-            addHand(hand: hand)
-        }
-        update(animatingDifferences: false)
+    @objc private func didCreateShoe() {
+        viewModel.loadShoe()
+        updateSnapshot(animatingDifferences: false)
     }
     
-    @objc private func undoHand() {
-        modelController.delete()
-        update()
+    @objc private func didDeleteData() {
+        viewModel.delete()
+        updateSnapshot(animatingDifferences: false)
     }
     
-    @objc private func didAddPlayer() {
-        modelController.add(hand: Hand(title: "P"))
-        update()
+    @objc private func didAddData() {
+        viewModel.update()
+        updateSnapshot()
     }
     
-    @objc private func didAddBanker() {
-        modelController.add(hand: Hand(title: "B"))
-        update()
-    }
-    
-    @objc private func didAddTie() {
-        modelController.add(hand: Hand(title: "T"))
-        update()
-    }
-    
-    private func addHand(hand: Hand) {
-        modelController.add(hand: hand)
-    }
-
-    private func setupLayout() {
+    private func configureLayout() {
         let layout = HorizontalVerticalCompositionalLayout(itemsPerRow: 6, contentInsets: 0)
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
@@ -86,12 +66,12 @@ extension BedPlateViewController {
             return cell
         }
         collectionView.dataSource = dataSource
-        update(animatingDifferences: false)
+        updateSnapshot(animatingDifferences: false)
     }
     
-    private func update(animatingDifferences: Bool = true) {
+    private func updateSnapshot(animatingDifferences: Bool = true) {
         var snapshot = NSDiffableDataSourceSnapshot<GridSection, GridItem?>()
-        modelController.gridSections.forEach { (section) in
+        viewModel.gridSections.forEach { (section) in
             snapshot.appendSections([section])
             snapshot.appendItems(section.hands)
         }
@@ -102,11 +82,11 @@ extension BedPlateViewController {
 //MARK: - UICollectionViewDiffableDataSource
 extension BedPlateViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let cell = collectionView.cellForItem(at: indexPath) as! BedPlateCell
-//        if cell.hand?.hand != nil {
-//            modelController.delete(uuid: cell.hand?.hand?.uuid ?? UUID())
-//            update()
-//        }
+        //        let cell = collectionView.cellForItem(at: indexPath) as! BedPlateCell
+        //        if cell.hand?.hand != nil {
+        //            modelController.delete(uuid: cell.hand?.hand?.uuid ?? UUID())
+        //            update()
+        //        }
     }
 }
 

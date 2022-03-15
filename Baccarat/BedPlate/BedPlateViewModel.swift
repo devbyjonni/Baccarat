@@ -1,5 +1,5 @@
 //
-//  BedPlateModel.swift
+//  BedPlateViewModel.swift
 //  Baccarat
 //
 //  Created by Jonni Akesson on 2022-03-01.
@@ -7,27 +7,41 @@
 
 import Foundation
 
-class BedPlateModel {
+class BedPlateViewModel {
     
     let model: ModelController
     private var currentSection = 0
     private var currentIndex = 0
+    private var gridItemArr: [IndexPath] = []
     var gridSections: [GridSection] = []
+    
     
     init(model: ModelController) {
         self.model = model
     }
     
-    func createNewShoe() {
+    func loadShoe() {
         reset()
         createGrid()
+        
+        for hand in model.shoes {
+            add(hand: hand)
+        }
     }
     
-    private func reset() {
-        currentSection = 0
-        currentIndex = 0
-        gridItemTable = [:]
-        gridItemArr = []
+    func update() {
+        add(hand: model.shoes.last!)
+    }
+    
+    
+    func delete() {
+        guard gridItemArr.count > 0 else { return }
+        let idx = gridItemArr.removeLast()
+        gridSections[idx.section].hands.remove(at: idx.item)
+        gridSections[idx.section].hands.insert(GridItem(hand: nil), at: idx.item)
+        
+        currentSection = idx.section
+        currentIndex = idx.item
     }
     
     func createGrid() {
@@ -40,29 +54,22 @@ class BedPlateModel {
             let sections = GridSection(hands: hands)
             sectionHands.append(sections)
         }
-        self.gridSections = sectionHands
+        gridSections = sectionHands
     }
     
-    private var gridItemArr = [IndexPath]()
-    private var gridItemTable = [String : IndexPath]()
-    
-    func delete() {
-        let idx = gridItemArr.removeLast()
-        gridSections[idx.section].hands.remove(at: idx.item)
-        gridSections[idx.section].hands.insert(GridItem(hand: nil), at: idx.item)
-
-        currentSection = idx.section
-        currentIndex = idx.item
+    private func reset() {
+        currentSection = 0
+        currentIndex = 0
+        gridItemArr = []
     }
     
-    func add(hand: Hand) {
-
+    private func add(hand: Hand) {
+        
         if hand.title == "P" {
             if currentIndex < 6 && gridSections[currentSection].hands[currentIndex].hand == nil { // If true, dragon tail will start.
                 gridSections[currentSection].hands.remove(at: currentIndex)
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 let idx = IndexPath(item: currentIndex, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 currentIndex += 1
             } else {
@@ -71,7 +78,6 @@ class BedPlateModel {
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
                 
                 let idx = IndexPath(item: 0, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 
                 currentIndex = 1
@@ -84,7 +90,6 @@ class BedPlateModel {
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 
                 let idx = IndexPath(item: currentIndex, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 
                 currentIndex += 1
@@ -94,7 +99,6 @@ class BedPlateModel {
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
                 
                 let idx = IndexPath(item: 0, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 
                 currentIndex = 1
@@ -107,7 +111,6 @@ class BedPlateModel {
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: currentIndex)
                 
                 let idx = IndexPath(item: currentIndex, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 
                 currentIndex += 1
@@ -117,7 +120,6 @@ class BedPlateModel {
                 gridSections[currentSection].hands.insert(GridItem(hand: hand), at: 0)
                 
                 let idx = IndexPath(item: 0, section: currentSection)
-                gridItemTable[hand.uuid.uuidString] = idx
                 gridItemArr.append(idx)
                 
                 currentIndex = 1
